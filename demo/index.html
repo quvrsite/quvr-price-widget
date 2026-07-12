@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>QUVR Ticker Widget — Demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      margin: 0;
+      padding: 40px 20px;
+      background: #05060a;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      color: #e6e8ee;
+    }
+    .container { max-width: 760px; margin: 0 auto; display: grid; gap: 24px; }
+    h1 { font-size: 20px; }
+    code {
+      background: #14161f;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 13px;
+    }
+    pre {
+      background: #14161f;
+      padding: 12px 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>&lt;quvr-ticker&gt; demo</h1>
+
+    <p>Default (dark theme, all symbols):</p>
+    <quvr-ticker></quvr-ticker>
+
+    <p>Light theme, filtered to <code>TSLA,SPY</code>, 5s refresh:</p>
+    <quvr-ticker theme="light" symbols="TSLA,SPY" interval="5000"></quvr-ticker>
+
+    <p>Embed code:</p>
+    <pre><code>&lt;script type="module" src="https://cdn.jsdelivr.net/gh/quvrsite/quvr-price-widget/src/quvr-ticker-widget.js"&gt;&lt;/script&gt;
+&lt;quvr-ticker interval="15000"&gt;&lt;/quvr-ticker&gt;</code></pre>
+  </div>
+
+  <script type="module" src="../src/quvr-ticker-widget.js"></script>
+</body>
+</html>

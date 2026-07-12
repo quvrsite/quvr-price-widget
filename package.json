@@ -1,0 +1,17 @@
+{
+  "name": "quvr-price-widget",
+  "version": "0.1.0",
+  "description": "Embeddable, dependency-free web component that shows a live QUVR stock-token / USDG price ticker on any website.",
+  "type": "module",
+  "main": "src/quvr-ticker-widget.js",
+  "module": "src/quvr-ticker-widget.js",
+  "files": ["src"],
+  "keywords": ["quvr", "widget", "web-component", "ticker", "robinhood-chain"],
+  "author": "QUVR",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/quvrsite/quvr-price-widget"
+  },
+  "homepage": "https://quvr.site"
+}
