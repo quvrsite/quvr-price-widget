@@ -1,70 +1,83 @@
-# quvr-price-widget
+# @quiver/widget
 
-A dependency-free `<quvr-ticker>` web component that shows a live price strip for stock tokens & USDG from [QUVR](https://quvr.site) — a bridge aggregator and watchlist for **Robinhood Chain**. Drop it into any website, no build step required.
+Embeddable price ticker / mini-watchlist widget for Quiver. Any site can drop this
+in with a single `<script>` tag and show live Stock Token / USDG prices, linking
+back to [quvr.site](https://quvr.site).
 
-- Website: https://quvr.site
-- Twitter/X: https://x.com/QUVRsite
-- Org: https://github.com/quvrsite
+> ⚠️ This widget calls Quiver's **public** `/api/tokens` endpoint via `@quiver/sdk`.
+> It doesn't handle authentication and shouldn't be used to display user-specific
+> (watchlist/portfolio) data — those require a signed-in session on the Quiver app
+> itself.
 
-## Preview
+## Safe by default
 
-```
-TSLA  $248.31  ▲ +1.42%     NVDA  $132.90  ▼ -0.55%     SPY  $612.04  0.03%     USDG  $1.00  0.00%
-                                                                            via QUVR
-```
+- Built on `@quiver/sdk`, so every poll goes through the SDK's in-memory cache and
+  429 backoff — see that package's README for details.
+- `refreshMs` is clamped to a **20s minimum**, matching the SDK's default cache TTL.
+  Setting it lower doesn't make the widget poll the backend faster, it just re-reads
+  the same cached value more often.
+- On a 429, the widget backs off silently for that cycle instead of retrying harder.
 
-## Usage
+## Usage (script tag)
 
 ```html
-<script type="module" src="https://cdn.jsdelivr.net/gh/quvrsite/quvr-price-widget/src/quvr-ticker-widget.js"></script>
-
-<quvr-ticker></quvr-ticker>
+<div id="qv-ticker"></div>
+<script src="https://cdn.jsdelivr.net/npm/@quiver/widget/dist/quiver-widget.global.js"></script>
+<script>
+  QuiverWidget.mount({
+    target: "#qv-ticker",
+    baseUrl: "https://quvr.site",
+    mode: "ticker",
+    symbols: ["TSLA", "NVDA", "USDG"],
+    theme: "dark",
+  });
+</script>
 ```
 
-### Attributes
-
-| Attribute  | Default                 | Description                                       |
-|------------|--------------------------|-----------------------------------------------------|
-| `base-url` | `https://quvr.site`      | Point at a different QUVR deployment                |
-| `interval` | `15000`                  | Poll interval in milliseconds                        |
-| `symbols`  | (all)                    | Comma-separated filter, e.g. `symbols="TSLA,NVDA"`   |
-| `theme`    | `dark`                   | `dark` or `light`                                     |
-
-### React / Vue / any framework
-
-Since it's a standard custom element, it works anywhere:
-
-```jsx
-function Ticker() {
-  return <quvr-ticker interval="10000" theme="light" />;
-}
-```
-
-### Styling
-
-The component renders inside a shadow DOM but exposes a `wrap` CSS part and CSS custom properties for easy theming:
-
-```css
-quvr-ticker {
-  --quvr-bg: #0b0d12;
-  --quvr-fg: #e6e8ee;
-  --quvr-up: #22c55e;
-  --quvr-down: #ef4444;
-}
-```
-
-## Local demo
+## Usage (npm / bundler)
 
 ```bash
-git clone https://github.com/quvrsite/quvr-price-widget
-cd quvr-price-widget
-npx serve .
-# open demo/index.html
+npm install @quiver/widget
 ```
 
-## Disclaimer
+```ts
+import { mount } from "@quiver/widget";
 
-This is an unofficial, community-built widget based on QUVR's publicly observable `/api/ticker` response shape. It may need updates if that shape changes.
+mount({
+  target: document.getElementById("qv-ticker")!,
+  baseUrl: "https://quvr.site",
+  mode: "ticker",
+  symbols: ["TSLA", "NVDA"],
+});
+```
+
+## Options
+
+| Option | Type | Default | Notes |
+|---|---|---|---|
+| `target` | `string \| HTMLElement` | required | CSS selector or element to mount into |
+| `baseUrl` | `string` | required | Quiver app base URL |
+| `mode` | `"ticker" \| "watchlist"` | required | `watchlist` mode is a placeholder for now — contributions welcome |
+| `symbols` | `string[]` | required | Token symbols to display |
+| `refreshMs` | `number` | `30000` | Clamped to a 5s minimum to avoid hammering the API |
+| `theme` | `"light" \| "dark"` | `"dark"` | |
+
+## Development
+
+```bash
+npm install
+npm run dev     # watch build to dist/
+open examples/index.html
+```
+
+## Rate limiting note
+
+This widget polls Quiver's public API from every visitor's browser — each visitor's
+own cache is independent, so on a high-traffic site you still get one request per
+visitor per `refreshMs` window at minimum. The SDK's cache prevents a single page
+from over-polling; it can't reduce cross-visitor volume. For very high-traffic
+embeds, consider fronting `/api/tokens` with your own edge cache, or ask the Quiver
+team about a CDN-cached read replica of this endpoint.
 
 ## License
 

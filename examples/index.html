@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Quiver Widget Demo</title>
+    <script src="../dist/quiver-widget.global.js"></script>
+  </head>
+  <body style="background:#111; padding: 40px;">
+    <div id="qv-ticker" style="max-width: 260px;"></div>
+    <script>
+      QuiverWidget.mount({
+        target: "#qv-ticker",
+        baseUrl: "https://quvr.site",
+        mode: "ticker",
+        symbols: ["TSLA", "NVDA", "USDG"],
+      });
+    </script>
+  </body>
+</html>

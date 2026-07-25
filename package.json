@@ -1,17 +1,24 @@
 {
-  "name": "quvr-price-widget",
-  "version": "0.1.0",
-  "description": "Embeddable, dependency-free web component that shows a live QUVR stock-token / USDG price ticker on any website.",
-  "type": "module",
-  "main": "src/quvr-ticker-widget.js",
-  "module": "src/quvr-ticker-widget.js",
-  "files": ["src"],
-  "keywords": ["quvr", "widget", "web-component", "ticker", "robinhood-chain"],
-  "author": "QUVR",
+  "name": "@quiver/widget",
+  "version": "0.2.0",
+  "description": "Embeddable price ticker & mini-watchlist widget for Quiver (Stock Tokens / USDG on Robinhood Chain). Drop it on any site with one script tag. Safe by default — shares @quiver/sdk's caching/backoff so it can't hammer the backend.",
+  "main": "dist/quiver-widget.js",
+  "module": "dist/quiver-widget.mjs",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup src/index.ts --format iife,esm --global-name QuiverWidget --minify",
+    "dev": "tsup src/index.ts --format iife --global-name QuiverWidget --watch"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/quvrsite/quvr-price-widget"
+    "url": "https://github.com/quvrsite/quiver-widget.git"
   },
-  "homepage": "https://quvr.site"
+  "dependencies": {
+    "@quiver/sdk": "^0.2.0"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.0",
+    "typescript": "^5.5.0"
+  }
 }
